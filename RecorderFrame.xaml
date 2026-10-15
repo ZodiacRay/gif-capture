@@ -1,0 +1,54 @@
+<Window x:Class="GifCapture.RecorderFrame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="app.ico" Title="GifCapture" Width="720" Height="520" MinWidth="580" MinHeight="260"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Topmost="True" WindowStartupLocation="CenterScreen" Foreground="{DynamicResource Fg}"
+        SourceInitialized="Window_SourceInitialized" Closed="Window_Closed">
+    <WindowChrome.WindowChrome>
+        <WindowChrome x:Name="Chrome" CaptionHeight="32" ResizeBorderThickness="6"
+                      GlassFrameThickness="0" CornerRadius="0" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6"/><ColumnDefinition Width="*"/><ColumnDefinition Width="6"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/><RowDefinition Height="*"/><RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+
+        <!-- Frame: everything except the centre cell is opaque; the centre stays transparent and click-through. -->
+        <Rectangle Grid.ColumnSpan="3" Fill="{DynamicResource PanelBg}"/>
+        <Rectangle Grid.Row="1" Fill="{DynamicResource PanelBg}"/>
+        <Rectangle Grid.Row="1" Grid.Column="2" Fill="{DynamicResource PanelBg}"/>
+        <Rectangle Grid.Row="2" Grid.ColumnSpan="3" Fill="{DynamicResource PanelBg}"/>
+        <Border x:Name="Center" Grid.Row="1" Grid.Column="1"/>
+
+        <DockPanel Grid.ColumnSpan="3" Margin="10,0,0,0">
+            <Button DockPanel.Dock="Right" Content="✕" Width="46" Click="Close_Click"
+                    WindowChrome.IsHitTestVisibleInChrome="True" BorderThickness="0" Background="Transparent"/>
+            <Button DockPanel.Dock="Right" Content="{DynamicResource ThemeIcon}" ToolTip="{DynamicResource ThemeName}" Padding="8,0" Margin="0,4" Click="Theme_Click"
+                    WindowChrome.IsHitTestVisibleInChrome="True" BorderThickness="0" Background="Transparent"/>
+            <ToggleButton x:Name="PinBtn" DockPanel.Dock="Right" Content="📌 고정" Padding="8,0" Margin="0,4"
+                          Checked="Pin_Changed" Unchecked="Pin_Changed"
+                          WindowChrome.IsHitTestVisibleInChrome="True" BorderThickness="0" Background="Transparent"/>
+            <TextBlock Text="GifCapture" VerticalAlignment="Center" FontSize="14"/>
+        </DockPanel>
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right"
+                    VerticalAlignment="Center" Margin="0,0,12,0">
+            <CheckBox x:Name="LimitBox" Content="타이머" VerticalAlignment="Center" Margin="0,0,4,0"
+                      ToolTip="정해진 시간이 지나면 자동으로 녹화를 멈춥니다"/>
+            <TextBox x:Name="LimitSec" Text="10" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                     ToolTip="녹화할 시간(초)"/>
+            <TextBlock Text="초" VerticalAlignment="Center" Margin="4,0,14,0"/>
+            <TextBox x:Name="Fps" Text="15" Width="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBlock Text="fps" VerticalAlignment="Center" Margin="4,0,14,0"/>
+            <TextBox x:Name="WBox" Width="52" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" KeyDown="Size_KeyDown" LostFocus="Size_Apply"/>
+            <TextBlock Text="×" VerticalAlignment="Center" Margin="4,0"/>
+            <TextBox x:Name="HBox" Width="52" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" KeyDown="Size_KeyDown" LostFocus="Size_Apply"/>
+            <TextBlock Text="px" VerticalAlignment="Center" Margin="4,0,14,0"/>
+            <Button x:Name="RecBtn" Style="{StaticResource RecordButton}" Content="● 녹화 (F7)" Click="Rec_Click" Padding="12,4" MinWidth="96"/>
+        </StackPanel>
+    </Grid>
+</Window>

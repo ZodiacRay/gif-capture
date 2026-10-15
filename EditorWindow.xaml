@@ -1,0 +1,206 @@
+<Window x:Class="GifCapture.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:GifCapture"
+        Icon="app.ico" Title="편집기" Width="900" Height="640" WindowStartupLocation="CenterScreen"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Background="{DynamicResource WindowBg}" Foreground="{DynamicResource Fg}">
+    <Window.Resources>
+        <local:PathToImageConverter x:Key="ToImage"/>
+        <SolidColorBrush x:Key="Teal" Color="#3FA796"/>
+        <Style x:Key="IconButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="MinWidth" Value="84"/>
+        </Style>
+        <Style x:Key="RibbonButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
+            <Setter Property="MinWidth" Value="68"/>
+            <Setter Property="Padding" Value="8,2"/>
+        </Style>
+        <Style x:Key="RibbonToggle" TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+            <Setter Property="MinWidth" Value="78"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,2"/>
+        </Style>
+        <Style x:Key="RibbonIcon" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{DynamicResource Teal}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="RibbonLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="GroupCaption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Opacity" Value="0.6"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,2"/>
+        </Style>
+        <Style x:Key="Group" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBr}"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+            <Setter Property="Padding" Value="6,0"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Top" Margin="8,6,8,2">
+            <Border Style="{StaticResource Group}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource GroupCaption}" Text="파일"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource RibbonButton}" Click="OpenGif_Click" ToolTip="다른 GIF 파일을 새 편집기 창으로 엽니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="📂"/><TextBlock Style="{StaticResource RibbonLabel}" Text="GIF 열기"/></StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource Group}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource GroupCaption}" Text="프레임 편집"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="UndoBtn" Style="{StaticResource RibbonButton}" Click="Undo_Click" IsEnabled="False" ToolTip="Ctrl+Z">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="↶"/><TextBlock Style="{StaticResource RibbonLabel}" Text="되돌리기"/></StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource RibbonButton}" Click="Delete_Click" ToolTip="선택한 프레임을 삭제합니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="✕"/><TextBlock Style="{StaticResource RibbonLabel}" Text="선택 삭제"/></StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource RibbonButton}" Click="TrimBefore_Click" ToolTip="선택한 프레임 앞쪽을 모두 삭제합니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="⇤"/><TextBlock Style="{StaticResource RibbonLabel}" Text="앞쪽 삭제"/></StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource RibbonButton}" Click="TrimAfter_Click" ToolTip="선택한 프레임 뒤쪽을 모두 삭제합니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="⇥"/><TextBlock Style="{StaticResource RibbonLabel}" Text="뒤쪽 삭제"/></StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Group}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource GroupCaption}" Text="이미지"/>
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton x:Name="CropBtn" Style="{StaticResource RibbonToggle}" Click="CropBtn_Click" ToolTip="모든 프레임의 화면을 자릅니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="✂"/><TextBlock Style="{StaticResource RibbonLabel}" Text="화면 자르기"/></StackPanel>
+                        </ToggleButton>
+                        <ToggleButton x:Name="TextBtn" Style="{StaticResource RibbonToggle}" Click="TextBtn_Click" ToolTip="프레임 위에 글자를 넣습니다">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="T"/><TextBlock Style="{StaticResource RibbonLabel}" Text="글자 추가"/></StackPanel>
+                        </ToggleButton>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+
+            <Border Style="{StaticResource Group}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource GroupCaption}" Text="내보내기"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel VerticalAlignment="Center" Margin="0,0,10,0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <CheckBox x:Name="LimitBox" Content="용량 제한" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBox x:Name="LimitMb" Text="5" Width="40" HorizontalContentAlignment="Center"
+                                         IsEnabled="{Binding IsChecked, ElementName=LimitBox}"/>
+                                <TextBlock Text="MB" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="LoopBox" Content="GIF 반복" IsChecked="True" ToolTip="저장된 GIF가 계속 반복 재생되게 합니다"/>
+                        </StackPanel>
+                        <Button Style="{StaticResource RibbonButton}" Click="Export_Click">
+                            <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="💾"/><TextBlock Style="{StaticResource RibbonLabel}" Text="GIF 내보내기"/></StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Group}" BorderThickness="0">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource GroupCaption}" Text="보기"/>
+                    <Button Style="{StaticResource RibbonButton}" Click="Theme_Click" ToolTip="라이트 / 다크 모드 전환">
+                        <StackPanel><TextBlock Style="{StaticResource RibbonIcon}" Text="{DynamicResource ThemeIcon}"/><TextBlock Style="{StaticResource RibbonLabel}" Text="{DynamicResource ThemeName}"/></StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource BorderBr}"/>
+        <Border x:Name="ToolPanel" DockPanel.Dock="Top" Visibility="Collapsed" Margin="8,0,8,4" Padding="8"
+                Background="{DynamicResource PanelBg}" BorderBrush="{DynamicResource BorderBr}" BorderThickness="1" CornerRadius="3">
+            <Grid>
+                <StackPanel x:Name="CropOpts" Orientation="Horizontal" Visibility="Collapsed">
+                    <TextBlock Text="가장자리·모서리를 끌어 크기를 조절하고, 안쪽을 끌어 이동하세요 (모든 프레임에 적용)" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <TextBlock x:Name="CropInfo" VerticalAlignment="Center" FontWeight="SemiBold" Margin="0,0,12,0"/>
+                    <Button Content="적용" Click="CropApply_Click" Padding="14,4" Margin="0,0,6,0"/>
+                    <Button Content="취소" Click="ToolCancel_Click" Padding="14,4"/>
+                </StackPanel>
+                <WrapPanel x:Name="TextOpts" Visibility="Collapsed">
+                    <TextBlock Text="글자" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox x:Name="LabelText" Width="200" TextChanged="TextOption_Changed" Margin="0,0,12,0"/>
+                    <TextBlock Text="크기" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox x:Name="TextSize" Text="32" Width="44" HorizontalContentAlignment="Center" TextChanged="TextOption_Changed" Margin="0,0,12,0"/>
+                    <TextBlock Text="색" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <StackPanel x:Name="Swatches" Orientation="Horizontal" Margin="0,0,12,0"/>
+                    <CheckBox x:Name="SelectedOnly" Content="선택한 프레임에만" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <TextBlock Text="미리보기를 클릭해 위치를 정하세요" VerticalAlignment="Center" Opacity="0.7" Margin="0,0,12,0"/>
+                    <Button Content="적용" Click="TextApply_Click" Padding="14,4" Margin="0,0,6,0"/>
+                    <Button Content="취소" Click="ToolCancel_Click" Padding="14,4"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4">
+            <Button Style="{StaticResource IconButton}" Click="First_Click">
+                <StackPanel><TextBlock Text="«" FontSize="24" Foreground="{DynamicResource Teal}" HorizontalAlignment="Center"/><TextBlock Text="맨 처음으로" FontSize="12" HorizontalAlignment="Center"/></StackPanel>
+            </Button>
+            <Button Style="{StaticResource IconButton}" Click="Prev_Click">
+                <StackPanel><TextBlock Text="←" FontSize="24" Foreground="{DynamicResource Teal}" HorizontalAlignment="Center"/><TextBlock Text="이전 프레임" FontSize="12" HorizontalAlignment="Center"/></StackPanel>
+            </Button>
+            <Button x:Name="PlayBtn" Style="{StaticResource IconButton}" Click="Play_Click">
+                <StackPanel><TextBlock x:Name="PlayIcon" Text="▶" FontSize="24" Foreground="{DynamicResource Teal}" HorizontalAlignment="Center"/><TextBlock x:Name="PlayLabel" Text="재생" FontSize="12" HorizontalAlignment="Center"/></StackPanel>
+            </Button>
+            <Button Style="{StaticResource IconButton}" Click="Next_Click">
+                <StackPanel><TextBlock Text="→" FontSize="24" Foreground="{DynamicResource Teal}" HorizontalAlignment="Center"/><TextBlock Text="다음 프레임" FontSize="12" HorizontalAlignment="Center"/></StackPanel>
+            </Button>
+            <Button Style="{StaticResource IconButton}" Click="Last_Click">
+                <StackPanel><TextBlock Text="»" FontSize="24" Foreground="{DynamicResource Teal}" HorizontalAlignment="Center"/><TextBlock Text="맨 마지막으로" FontSize="12" HorizontalAlignment="Center"/></StackPanel>
+            </Button>
+            <StackPanel VerticalAlignment="Center" Margin="14,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <TextBlock Text="재생 속도 ×" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                    <TextBox x:Name="Speed" Text="1" Width="46" Height="24" HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center" ToolTip="재생과 내보내기 속도 배율 (2 = 두 배 빠르게)"/>
+                </StackPanel>
+                <CheckBox x:Name="PlayLoop" Content="반복 재생" IsChecked="True" FontSize="12" Opacity="0.85"/>
+            </StackPanel>
+        </StackPanel>
+        <Border DockPanel.Dock="Top" Height="1" Background="{DynamicResource BorderBr}"/>
+        <TextBlock x:Name="Info" DockPanel.Dock="Bottom" Margin="8,4"/>
+        <ListBox x:Name="Strip" DockPanel.Dock="Bottom" Height="112" SelectionMode="Extended" Padding="12,2,12,2"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                 SelectionChanged="Strip_SelectionChanged" VirtualizingPanel.IsVirtualizing="True">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate><VirtualizingStackPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="104" Margin="2">
+                        <Image Source="{Binding Path, Converter={StaticResource ToImage}, ConverterParameter=120}"
+                               Height="66" Stretch="Uniform"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding Number}" FontSize="12" Margin="0,0,6,0"/>
+                            <TextBlock Text="{Binding DelayMs, StringFormat={}{0} ms}" FontSize="11"
+                                       FontStyle="Italic" Opacity="0.65" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Margin="8">
+            <Image x:Name="Preview" Stretch="Uniform"/>
+            <Canvas x:Name="Overlay" Background="Transparent" IsHitTestVisible="False" ClipToBounds="True"
+                    MouseLeftButtonDown="Overlay_Down" MouseMove="Overlay_Move" MouseLeftButtonUp="Overlay_Up">
+                <Path x:Name="Dim" Fill="#99000000" IsHitTestVisible="False" Visibility="Collapsed"/>
+                <Rectangle x:Name="SelRect" Visibility="Collapsed" Stroke="#FF3B82F6" StrokeThickness="2"
+                           Fill="Transparent" IsHitTestVisible="False"/>
+                <TextBlock x:Name="TextPreview" Visibility="Collapsed" FontFamily="Malgun Gothic" FontWeight="Bold"
+                           IsHitTestVisible="False"/>
+            </Canvas>
+        </Grid>
+    </DockPanel>
+</Window>

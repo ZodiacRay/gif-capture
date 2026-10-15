@@ -1,0 +1,12 @@
+<Window x:Class="GifCapture.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="app.ico" Title="GifCapture" Width="260" Height="190" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource WindowBg}" Foreground="{DynamicResource Fg}">
+    <StackPanel Margin="16" VerticalAlignment="Center">
+        <Button Style="{StaticResource RecordButton}" Content="● 녹화 시작" Click="Record_Click" Padding="8,6" Margin="0,0,0,8"/>
+        <Button Content="📂 GIF 불러오기" Click="Open_Click" Padding="8,4" Margin="0,0,0,8"/>
+        <Button Content="{DynamicResource ThemeLabel}" Click="Theme_Click" Padding="8,4"/>
+    </StackPanel>
+</Window>
