@@ -4,12 +4,12 @@
 
 ## 다운로드
 
-[최신 릴리스](https://github.com/ZodiacRay/gif-capture/releases/latest)의 **Assets**에서 받을 수 있습니다.
+링크를 누르면 최신 버전이 바로 내려받아집니다.
 
-- **설치 프로그램 (추천):** `GifCapture-Setup-*.exe` — 시작 메뉴 바로가기가 만들어지고, Windows 설정의 "앱"에서 제거할 수 있습니다. 관리자 권한이 필요 없습니다.
-- **압축 파일:** `GifCapture-*-win-x64.zip` — 압축을 풀고 `GifCapture.exe`를 바로 실행합니다.
+- **[설치 프로그램 (추천)](https://github.com/ZodiacRay/gif-capture/releases/latest/download/GifCapture-Setup.exe)** — 시작 메뉴 바로가기가 만들어지고, Windows 설정의 "앱"에서 제거할 수 있습니다. 관리자 권한이 필요 없습니다.
+- **[압축 파일 (zip)](https://github.com/ZodiacRay/gif-capture/releases/latest/download/GifCapture-win-x64.zip)** — 압축을 풀고 `GifCapture.exe`를 바로 실행합니다.
 
-둘 다 .NET을 따로 설치할 필요가 없습니다. 코드 서명이 없어서 처음 실행할 때 Windows SmartScreen 경고가 뜰 수 있으며, **추가 정보 → 실행**을 누르면 열립니다.
+둘 다 .NET을 따로 설치할 필요가 없습니다. 코드 서명이 없어서 처음 실행할 때 Windows SmartScreen 경고가 뜰 수 있으며, **추가 정보 → 실행**을 누르면 열립니다. 이전 버전과 변경 내역은 [Releases](https://github.com/ZodiacRay/gif-capture/releases)에서 볼 수 있습니다.
 
 ## 기능
 
@@ -62,6 +62,8 @@ ISCC.exe /DSourceDir="..\publish" /Odist installer\GifCapture.iss
 ```
 
 설치 프로그램은 `dist\`에 생깁니다. 설치 스크립트는 [`installer/GifCapture.iss`](installer/GifCapture.iss)입니다.
+
+새 릴리스를 올릴 때는 파일 이름에서 버전을 빼고 `GifCapture-Setup.exe`, `GifCapture-win-x64.zip`으로 올려야 합니다. 그래야 위 다운로드 링크(`releases/latest/download/...`)가 항상 최신 파일을 가리킵니다.
 
 ## 사용 방법
 
