@@ -2,12 +2,22 @@
 
 화면 영역을 녹화해서 GIF로 편집·저장하는 Windows용 데스크톱 앱입니다. WPF(.NET 9)로 만들었습니다.
 
+## 다운로드
+
+[최신 릴리스](https://github.com/ZodiacRay/gif-capture/releases/latest)의 **Assets**에서 받을 수 있습니다.
+
+- **설치 프로그램 (추천):** `GifCapture-Setup-*.exe` — 시작 메뉴 바로가기가 만들어지고, Windows 설정의 "앱"에서 제거할 수 있습니다. 관리자 권한이 필요 없습니다.
+- **압축 파일:** `GifCapture-*-win-x64.zip` — 압축을 풀고 `GifCapture.exe`를 바로 실행합니다.
+
+둘 다 .NET을 따로 설치할 필요가 없습니다. 코드 서명이 없어서 처음 실행할 때 Windows SmartScreen 경고가 뜰 수 있으며, **추가 정보 → 실행**을 누르면 열립니다.
+
 ## 기능
 
 **녹화**
 - 크기를 조절할 수 있는 투명 프레임으로 녹화 영역 지정 (가장자리를 끌어 크기 조절, 제목줄을 끌어 이동)
 - `F7` 전역 단축키로 녹화 시작/정지 (다른 앱에 포커스가 있어도 동작)
 - fps와 영역 크기(px) 직접 입력, 녹화 경과 시간 표시
+- 타이머: 정한 시간(초)이 지나면 자동으로 녹화 종료
 - 녹화 중에도 프레임 이동 가능, 📌 고정으로 이동 잠금
 - 프레임 창 자체는 녹화 결과에 찍히지 않음
 
@@ -30,7 +40,8 @@
 ## 요구 사항
 
 - Windows 10 (버전 2004 이상) 또는 Windows 11
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) (빌드), 또는 .NET 9 Desktop Runtime (실행만)
+- 위 다운로드 파일로 실행할 때는 추가로 필요한 것이 없습니다.
+- 소스에서 직접 빌드하려면 [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)가 필요합니다.
 
 ## 빌드와 실행
 
@@ -40,6 +51,17 @@ dotnet run
 ```
 
 빌드 결과는 `bin\Debug\net9.0-windows\GifCapture.exe`에 생깁니다.
+
+### 배포 파일 만들기
+
+.NET을 포함한 단일 exe를 만들고, [Inno Setup](https://jrsoftware.org/isinfo.php)으로 설치 프로그램을 만듭니다.
+
+```powershell
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -o publish
+ISCC.exe /DSourceDir="..\publish" /Odist installer\GifCapture.iss
+```
+
+설치 프로그램은 `dist\`에 생깁니다. 설치 스크립트는 [`installer/GifCapture.iss`](installer/GifCapture.iss)입니다.
 
 ## 사용 방법
 
