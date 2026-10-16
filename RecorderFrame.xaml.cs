@@ -26,12 +26,57 @@ public partial class RecorderFrame : Window
 
     public List<Frame> Frames { get; private set; } = new();
 
+    readonly RecorderSettings? _saved = RecorderSettings.Load();
+
     public RecorderFrame()
     {
         InitializeComponent();
         SizeChanged += (_, _) => ShowSize();
         LocationChanged += (_, _) => _recorder?.MoveTo(Region().Location);
         _timer.Tick += (_, _) => OnTick();
+        Closing += (_, _) => SaveSettings();
+        RestoreSettings();
+    }
+
+    /// <summary>Brings back what was used last time; the area size is applied once the window knows its DPI.</summary>
+    void RestoreSettings()
+    {
+        if (_saved is not { } s) return;
+
+        Fps.Text = Math.Clamp(s.Fps, 1, 60).ToString();
+        LimitBox.IsChecked = s.TimerOn;
+        LimitSec.Text = Math.Clamp(s.TimerSeconds, 1, 3600).ToString();
+        PinBtn.IsChecked = s.Pinned;
+
+        // Only reuse the position if the title bar is still reachable (a monitor may have been unplugged).
+        var screen = new Rect(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop,
+            SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
+        var titleBar = Rect.Intersect(screen, new Rect(s.Left, s.Top, Width, 32));
+        if (!titleBar.IsEmpty && titleBar.Width >= 100 && titleBar.Height >= 16)
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            Left = s.Left;
+            Top = s.Top;
+        }
+    }
+
+    void SaveSettings()
+    {
+        if (_hwnd == IntPtr.Zero) return;
+        var region = Region();
+        if (region.Width < 16 || region.Height < 16) return;
+
+        new RecorderSettings
+        {
+            Width = region.Width,
+            Height = region.Height,
+            Left = Left,
+            Top = Top,
+            Fps = int.TryParse(Fps.Text, out var fps) ? Math.Clamp(fps, 1, 60) : 15,
+            TimerOn = LimitBox.IsChecked == true,
+            TimerSeconds = int.TryParse(LimitSec.Text, out var sec) ? Math.Clamp(sec, 1, 3600) : 10,
+            Pinned = PinBtn.IsChecked == true,
+        }.Save();
     }
 
     void Window_SourceInitialized(object? sender, EventArgs e)
@@ -41,6 +86,7 @@ public partial class RecorderFrame : Window
         SetWindowDisplayAffinity(_hwnd, WDA_EXCLUDEFROMCAPTURE);
         HwndSource.FromHwnd(_hwnd)?.AddHook(WndProc);
         RegisterHotKey(_hwnd, HotkeyId, 0, VK_F7);
+        if (_saved != null) SetRegionSize(_saved.Width, _saved.Height);
         ShowSize();
     }
 
@@ -79,6 +125,12 @@ public partial class RecorderFrame : Window
     void Size_Apply(object sender, RoutedEventArgs e)
     {
         if (_recorder != null || !int.TryParse(WBox.Text, out var w) || !int.TryParse(HBox.Text, out var h)) { ShowSize(); return; }
+        SetRegionSize(w, h);
+    }
+
+    /// <summary>Sizes the window so the recording area is w x h screen pixels.</summary>
+    void SetRegionSize(int w, int h)
+    {
         var dpi = VisualTreeHelper.GetDpi(this);
         Width = Math.Max(MinWidth, w / dpi.DpiScaleX + SideDip);
         Height = Math.Max(MinHeight, h / dpi.DpiScaleY + ChromeHeightDip);
