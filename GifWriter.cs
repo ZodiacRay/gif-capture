@@ -18,6 +18,7 @@ public sealed class GifWriter : IDisposable
     int _width, _height;
     byte[]? _previous; // BGRA pixels of the previous source frame
     bool _headerWritten;
+    int _carry; // ms lost to rounding to whole centiseconds, folded into the next frame
 
     public GifWriter(Stream output, bool loop)
     {
@@ -129,7 +130,10 @@ public sealed class GifWriter : IDisposable
             }
 
         // Graphic control extension: delay, transparency, "do not dispose" so later frames draw on top.
-        var centis = Math.Max(2, (delayMs + 5) / 10); // viewers treat <2 as 10 (100 ms)
+        // GIF delays are whole 10 ms steps; carry the rounding error forward so the total duration stays right.
+        var wanted = delayMs + _carry;
+        var centis = Math.Max(2, (int)Math.Round(wanted / 10.0, MidpointRounding.AwayFromZero)); // viewers treat <2 as 10 (100 ms)
+        _carry = Math.Clamp(wanted - centis * 10, -10, 10);
         _out.WriteByte(0x21); _out.WriteByte(0xF9); _out.WriteByte(0x04);
         _out.WriteByte((byte)((1 << 2) | (useTransparency ? 1 : 0)));
         WriteUInt16(centis);
