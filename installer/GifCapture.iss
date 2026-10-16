@@ -4,7 +4,10 @@
 ;   dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -o publish
 
 #define AppName "GifCapture"
-#define AppVersion "0.1.0"
+; Keep in sync with <Version> in GifCapture.csproj.
+#ifndef AppVersion
+  #define AppVersion "0.2.0"
+#endif
 #define AppExe "GifCapture.exe"
 
 #ifndef SourceDir
@@ -53,3 +56,11 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopico
 
 [Run]
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
+; The in-app updater runs this setup silently with /update=1 and expects the app to come back afterwards.
+Filename: "{app}\{#AppExe}"; Flags: nowait; Check: IsUpdateRun
+
+[Code]
+function IsUpdateRun: Boolean;
+begin
+  Result := ExpandConstant('{param:update|0}') = '1';
+end;

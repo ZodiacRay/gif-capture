@@ -15,6 +15,7 @@ public partial class EditorWindow : Window
     public EditorWindow(IEnumerable<Frame> frames)
     {
         InitializeComponent();
+        Theme.Attach(this);
         _frames = new ObservableCollection<Frame>(frames);
         Strip.ItemsSource = _frames;
         _frames.CollectionChanged += (_, _) => { Renumber(); UpdateInfo(); };

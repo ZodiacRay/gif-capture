@@ -11,6 +11,14 @@
 
 둘 다 .NET을 따로 설치할 필요가 없습니다. 코드 서명이 없어서 처음 실행할 때 Windows SmartScreen 경고가 뜰 수 있으며, **추가 정보 → 실행**을 누르면 열립니다. 이전 버전과 변경 내역은 [Releases](https://github.com/ZodiacRay/gif-capture/releases)에서 볼 수 있습니다.
 
+### 업데이트
+
+앱을 켜면 새 버전이 있는지 확인하고, 있으면 메인 창 위쪽에 알림이 뜹니다. **업데이트**를 누르면 새 설치 프로그램을 받아 설치하고 앱을 다시 실행합니다. 메인 창 아래의 **업데이트 확인** 버튼으로 직접 확인할 수도 있습니다.
+
+- 확인할 때 GitHub에 최신 릴리스 정보를 한 번 요청합니다. 이 외의 정보는 보내지 않습니다. 메인 창의 **시작할 때 새 버전 확인**을 끄면 요청하지 않습니다.
+- 받은 설치 프로그램은 이 저장소의 릴리스 주소에서만 받고, 파일 크기와 SHA-256 해시가 맞는지 검사한 뒤에만 실행합니다. 검사에 실패하면 파일을 지우고 실행하지 않습니다.
+- zip으로 쓰는 경우는 자동으로 바뀌지 않으므로, 알림이 뜨면 새 zip을 받아서 교체하세요.
+
 ## 기능
 
 **녹화**
@@ -62,6 +70,8 @@ ISCC.exe /DSourceDir="..\publish" /Odist installer\GifCapture.iss
 ```
 
 설치 프로그램은 `dist\`에 생깁니다. 설치 스크립트는 [`installer/GifCapture.iss`](installer/GifCapture.iss)입니다.
+
+버전은 `GifCapture.csproj`의 `<Version>`과 `installer/GifCapture.iss`의 `AppVersion` 두 곳에서 같이 올립니다. 앱의 업데이트 알림은 실행 중인 앱의 버전과 최신 릴리스의 태그(`v0.2.0` 등)를 비교합니다.
 
 새 릴리스를 올릴 때는 파일 이름에서 버전을 빼고 `GifCapture-Setup.exe`, `GifCapture-win-x64.zip`으로 올려야 합니다. 그래야 위 다운로드 링크(`releases/latest/download/...`)가 항상 최신 파일을 가리킵니다.
 
