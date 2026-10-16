@@ -13,7 +13,9 @@
 
 ### 웹 버전
 
-설치 없이 브라우저에서 쓰는 버전도 있습니다. 소스는 [`web/`](web/) 폴더에 있고, 사용법과 개발 방법은 [web/README.md](web/README.md)를 참고하세요.
+설치 없이 브라우저에서 바로 쓰는 버전도 있습니다: **https://zodiacray.github.io/gif-capture/**
+
+영상은 브라우저 안에서만 처리되고 서버로 전송되지 않습니다. 소스는 [`web/`](web/) 폴더에 있고, 사용법과 개발 방법은 [web/README.md](web/README.md)를 참고하세요.
 
 ### 업데이트
 
