@@ -35,7 +35,11 @@ jobs:
 
       - run: npm ci
       - run: npm test
+      # Ads stay off unless these repository variables (Settings > Secrets and variables > Actions > Variables) are set.
       - run: npm run build
+        env:
+          VITE_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT }}
+          VITE_ADSENSE_SLOT_HOME: ${{ vars.ADSENSE_SLOT_HOME }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

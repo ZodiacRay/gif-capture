@@ -46,7 +46,7 @@ Node.js 22.12 이상이 필요합니다.
 cd web
 npm install
 npm run dev        # 개발 서버 (http://localhost:5173)
-npm test           # 인코더·디코더·용량 탐색 테스트
+npm test           # 인코더·디코더·용량 탐색·광고 규칙 테스트
 npm run typecheck  # 타입 검사
 npm run build      # dist/ 에 배포용 파일 생성
 ```
@@ -65,15 +65,38 @@ src/
   model.ts           프레임 목록과 되돌리기 기록
   strip.ts, player.ts  프레임 목록, 미리보기와 재생
   storage.ts, theme.ts  기억하는 설정, 라이트/다크
+  ads.ts, adsPolicy.ts  선택적 광고와 동의 (설정이 없으면 아무것도 하지 않음)
   gif/
     encoder.ts       GIF 인코더 (색상 줄이기, LZW, 바뀐 부분만 저장)
     decoder.ts       GIF 읽기 (프레임 합성, 처리 방식 3가지 지원)
     sizeSearch.ts    목표 용량에 맞는 크기 탐색
     export.worker.ts 웹 워커에서 인코딩 (화면이 멈추지 않음)
-tests/               인코더·디코더·용량 탐색 테스트
+public/              안내 페이지(guide, privacy)와 아이콘
+tests/               인코더·디코더·용량 탐색·광고 규칙 테스트
 ```
 
 프레임은 편집해도 원본을 고치지 않고 새 프레임을 만들기 때문에, 되돌리기는 프레임 목록의 복사본을 되돌리는 것으로 충분합니다.
+
+## 광고 (선택)
+
+기본값은 **광고 없음**입니다. 광고 설정이 비어 있으면 광고, 동의 배너, 관련 문구가 어디에도 나타나지 않습니다. 설정을 넣으면 Google AdSense 광고를 **시작 화면 한 곳**에만 표시합니다. 녹화 화면과 편집기에는 광고가 없습니다.
+
+- 방문자가 **동의하기 전에는 광고 스크립트를 불러오지 않습니다.** 거부하면 광고가 나오지 않고, 푸터의 "광고 설정"에서 언제든 다시 고를 수 있습니다. 동의를 철회하면 페이지가 새로 시작되어 광고 스크립트가 남지 않습니다.
+- 광고 설정 값은 코드가 아니라 빌드 때 넣습니다.
+
+| 변수 | 내용 |
+|---|---|
+| `ADSENSE_CLIENT` | AdSense 게시자 ID (`ca-pub-` 뒤에 숫자) |
+| `ADSENSE_SLOT_HOME` | 시작 화면용 광고 단위 ID (숫자) |
+
+GitHub 저장소의 **Settings → Secrets and variables → Actions → Variables**에 위 두 개를 넣으면 다음 배포부터 켜집니다. 로컬에서 시험하려면 `VITE_ADSENSE_CLIENT`, `VITE_ADSENSE_SLOT_HOME` 환경 변수로 같은 값을 주고 `npm run dev`를 실행하세요. 형식이 맞지 않는 값은 "설정 안 됨"으로 취급합니다.
+
+광고를 켜기 전에 확인할 것:
+- **승인**: AdSense 승인은 계정과 사이트 심사를 거칩니다. 승인되기 전에는 게시자 ID와 광고 단위가 없습니다. [사용 방법·FAQ](public/guide.html)와 [개인정보처리방침](public/privacy.html) 페이지는 심사에 필요한 기본 내용으로 만들어 두었습니다.
+- **도메인과 `ads.txt`**: AdSense는 보통 본인 소유의 도메인을 요구하고, `ads.txt` 파일은 도메인 최상위 주소에 있어야 합니다. 그 파일을 `public/ads.txt`에 넣으면 됩니다(`github.io` 하위 주소로는 최상위에 둘 수 없습니다).
+- **EU/영국/스위스 방문자**: 이 사이트의 동의 배너는 단순한 안내이며 Google이 요구하는 인증된 동의 관리 도구(CMP)가 아닙니다. 해당 지역 방문자가 있다면 AdSense의 "개인정보 보호 및 메시지"(Google CMP)를 설정하세요.
+- **개인정보처리방침**: 일반적인 내용으로 작성한 안내이므로 운영 형태에 맞게 직접 검토하고 필요하면 고치세요.
+- **호스팅 약관**: GitHub Pages는 영리 목적 사이트 운영에 제한이 있습니다. 광고를 켜기 전에 [약관](https://docs.github.com/pages/getting-started-with-github-pages/github-pages-limits)을 확인하거나 다른 호스팅으로 옮기는 것을 검토하세요.
 
 ## 배포 (GitHub Pages)
 

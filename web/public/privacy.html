@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="GifCapture Web 개인정보처리방침" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="stylesheet" href="./page.css" />
+    <title>개인정보처리방침 · GifCapture Web</title>
+    <script>
+      // Use the light/dark choice made in the app.
+      try {
+        var t = JSON.parse(localStorage.getItem('gif-capture-web:settings') || '{}').theme;
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <header><a href="./">← GifCapture Web</a></header>
+    <main>
+      <h1>개인정보처리방침</h1>
+      <p class="meta">시행일: 2026년 10월 16일</p>
+      <p class="lead">
+        GifCapture Web(이하 "이 사이트")은 브라우저에서 화면을 녹화하고 GIF로 편집하는 도구입니다. 이 문서는 이 사이트가 어떤 정보를 다루는지 설명합니다.
+      </p>
+
+      <h2>1. 녹화·편집한 영상은 서버로 전송되지 않습니다</h2>
+      <p>
+        화면 녹화, 프레임 편집, GIF 만들기는 모두 방문자의 브라우저 안에서 처리됩니다. 녹화한 화면, 불러온 GIF, 만든 GIF는 이 사이트의 서버나 제3자에게 전송되거나 저장되지 않으며,
+        브라우저 탭을 닫거나 새로고침하면 사라집니다. 이 사이트에는 영상을 올리는 서버 자체가 없습니다.
+      </p>
+
+      <h2>2. 이 사이트가 저장하는 정보</h2>
+      <p>방문자의 브라우저(localStorage)에 다음 설정만 저장하며, 이 값은 방문자의 기기에만 남고 외부로 전송되지 않습니다.</p>
+      <ul>
+        <li>화면 테마(라이트/다크), fps, 타이머, 재생 속도, 글자 크기와 색 같은 사용 설정</li>
+        <li>광고 쿠키에 대한 동의 여부(광고가 설정된 경우에만)</li>
+      </ul>
+      <p>브라우저의 사이트 데이터 삭제 기능으로 언제든 지울 수 있습니다. 이 사이트는 별도의 회원가입이나 로그인을 요구하지 않으며, 접속 분석 도구를 사용하지 않습니다.</p>
+
+      <h2>3. 호스팅</h2>
+      <p>
+        이 사이트는 GitHub Pages(GitHub, Inc.)를 통해 제공됩니다. 페이지를 열 때 GitHub의 서버가 IP 주소 등 접속 정보를 처리할 수 있으며, 이는
+        <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub 개인정보 처리방침</a>을 따릅니다.
+        사이트 운영자는 이 정보를 열람하거나 수집하지 않습니다.
+      </p>
+
+      <h2>4. 광고 (광고가 표시되는 경우)</h2>
+      <p>이 사이트의 시작 화면에는 Google AdSense 광고가 표시될 수 있습니다. 광고가 표시되는 경우 다음이 적용됩니다.</p>
+      <ul>
+        <li>광고는 <strong>시작 화면에만</strong> 표시되며, 녹화 화면과 편집 화면에는 표시되지 않습니다.</li>
+        <li>방문자가 <strong>동의하기 전에는 광고 스크립트를 불러오지 않습니다.</strong> 동의하지 않으면 광고가 표시되지 않습니다.</li>
+        <li>
+          동의한 경우 Google 및 광고 제휴사가 쿠키 또는 광고 식별자를 사용해 광고를 제공하고 광고 성과를 측정할 수 있습니다. 이 과정은 Google의 정책을 따릅니다.
+          <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">Google이 파트너 사이트의 데이터를 사용하는 방법</a>,
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google 개인정보처리방침</a>
+        </li>
+        <li>
+          동의는 언제든 바꿀 수 있습니다. 앱 하단의 "광고 설정"에서 다시 선택하거나, 브라우저의 사이트 데이터를 삭제하세요. 맞춤 광고 자체는
+          <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google 광고 설정</a>에서 끌 수 있습니다.
+        </li>
+      </ul>
+      <p>광고가 설정되지 않은 동안에는 이 사이트에서 광고 관련 쿠키가 사용되지 않습니다.</p>
+
+      <h2>5. 어린이</h2>
+      <p>이 사이트는 어린이를 대상으로 하지 않으며, 이용자의 개인정보를 직접 수집하지 않습니다.</p>
+
+      <h2>6. 문의와 변경</h2>
+      <p>
+        이 방침에 대한 문의는 <a href="https://github.com/ZodiacRay/gif-capture/issues" target="_blank" rel="noopener">GitHub 이슈</a>로 남겨 주세요.
+        내용이 바뀌면 이 페이지에 새 시행일과 함께 게시합니다.
+      </p>
+    </main>
+    <footer><a href="./guide.html">사용 방법 · FAQ</a> · <a href="./">앱으로 돌아가기</a></footer>
+  </body>
+</html>

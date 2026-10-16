@@ -8,6 +8,8 @@ export interface HomeHooks {
 
 export interface HomeView {
   el: HTMLElement;
+  /** Empty, hidden container for the optional ad (only used when ads are configured and allowed). */
+  adSlot: HTMLElement;
   setActive(active: boolean): void;
 }
 
@@ -26,6 +28,9 @@ export function createHome(hooks: HomeHooks): HomeView {
     { class: 'btn record big', type: 'button', onclick: () => hooks.onRecord(), disabled: !supported },
     '● 화면 녹화 시작',
   );
+
+  const adSlot = h('aside', { class: 'ad-slot', 'aria-label': '광고' });
+  adSlot.hidden = true;
 
   const el = h(
     'div',
@@ -48,10 +53,12 @@ export function createHome(hooks: HomeHooks): HomeView {
       h('li', {}, h('strong', {}, '용량 맞춤'), ' 목표 MB에 맞춰 자동으로 크기를 줄여 저장'),
       h('li', {}, h('strong', {}, '기존 GIF 편집'), ' GIF를 불러와서 같은 방식으로 편집'),
     ),
+    adSlot,
   );
 
   return {
     el,
+    adSlot,
     setActive(value: boolean) {
       el.hidden = !value;
     },

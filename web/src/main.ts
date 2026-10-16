@@ -1,4 +1,5 @@
 import './style.css';
+import { initAds } from './ads';
 import { h } from './dom';
 import { importGif } from './importGif';
 import { FrameStore } from './model';
@@ -115,12 +116,37 @@ const header = h(
 
 const dropHint = h('div', { class: 'drop-hint', hidden: true }, 'GIF 파일을 여기에 놓으세요');
 
+const ads = initAds(home.adSlot);
+
+const footerLinks = h(
+  'nav',
+  { class: 'footer-links', 'aria-label': '안내' },
+  h('a', { href: './guide.html' }, '사용 방법 · FAQ'),
+  h('a', { href: './privacy.html' }, '개인정보처리방침'),
+  h('a', { href: `${REPO}/issues`, target: '_blank', rel: 'noopener' }, '문의'),
+);
+if (ads.enabled) footerLinks.append(h('button', { class: 'link-btn', type: 'button', onclick: () => ads.reopen() }, '광고 설정'));
+
+const footer = h(
+  'footer',
+  { class: 'app-footer' },
+  h(
+    'div',
+    {},
+    ads.enabled
+      ? '녹화·편집한 영상과 GIF는 이 브라우저 안에서만 처리되며 서버로 전송되지 않습니다. 광고에 동의한 경우 광고 회사가 쿠키를 사용할 수 있습니다.'
+      : '영상과 GIF는 이 브라우저 안에서만 처리되며 서버로 전송되지 않습니다.',
+  ),
+  footerLinks,
+  h('div', {}, 'MIT License'),
+);
+
 const app = document.getElementById('app');
 if (!app) throw new Error('#app not found');
 app.append(
   header,
   h('main', { class: 'app-main' }, home.el, record.el, editor.el),
-  h('footer', { class: 'app-footer' }, 'MIT License · 영상과 GIF는 이 브라우저 안에서만 처리되며 서버로 전송되지 않습니다.'),
+  footer,
   dropHint,
 );
 show('home');

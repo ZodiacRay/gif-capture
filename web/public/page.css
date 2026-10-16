@@ -1,0 +1,111 @@
+/* Shared look of the plain information pages (guide, privacy). Follows the app's light/dark choice. */
+:root {
+  --bg: #f5f6f7;
+  --panel: #ffffff;
+  --text: #1e1e1e;
+  --muted: #5b6370;
+  --border: #d4d4d8;
+  --accent: #247f70;
+}
+:root[data-theme='dark'] {
+  --bg: #1b1b1c;
+  --panel: #2a2a2b;
+  --text: #e8e8e8;
+  --muted: #a3a9b3;
+  --border: #4b4b4e;
+  --accent: #4fbfae;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #1b1b1c;
+    --panel: #2a2a2b;
+    --text: #e8e8e8;
+    --muted: #a3a9b3;
+    --border: #4b4b4e;
+    --accent: #4fbfae;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.7 system-ui, -apple-system, 'Segoe UI', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+}
+header,
+main,
+footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+header {
+  padding-top: 20px;
+  padding-bottom: 8px;
+}
+header a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+main {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 28px 28px;
+  margin-top: 12px;
+}
+h1 {
+  font-size: 26px;
+  margin: 24px 0 4px;
+}
+h2 {
+  font-size: 18px;
+  margin: 28px 0 6px;
+}
+p,
+li {
+  margin: 6px 0;
+}
+.lead,
+.meta {
+  color: var(--muted);
+}
+a {
+  color: var(--accent);
+}
+kbd {
+  font: 12px ui-monospace, 'Cascadia Mono', monospace;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0;
+}
+th,
+td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+details {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+footer {
+  padding-top: 16px;
+  padding-bottom: 32px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
