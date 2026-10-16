@@ -1,0 +1,24 @@
+{
+  "name": "gif-capture-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Record the screen in the browser, edit frames and export a GIF. Nothing leaves your computer.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "omggif": "^1.0.10"
+  },
+  "devDependencies": {
+    "@types/omggif": "^1.0.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}

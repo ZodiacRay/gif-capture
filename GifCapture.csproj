@@ -9,6 +9,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <Version>0.2.0</Version>
+    <!-- The web version lives in web/ and must not be picked up by the desktop build. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);web/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
